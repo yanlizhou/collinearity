@@ -29,5 +29,3 @@ end
 [loo,loos,pk] = psisloo(loglikemat);
 
 save(['cross_validate' num2str(iid) '.mat'],'loo','loos','pk');
-
-% Added stuff
