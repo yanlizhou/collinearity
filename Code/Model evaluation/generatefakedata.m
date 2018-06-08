@@ -1,7 +1,8 @@
-function data = generatefakedata(theta,v_dy,model,task,lapse,form,displayflag,nTrialsC,nTrialsD)
+function data = generatefakedata(theta,v_dy,model,task,lapse,form,displayflag,nTrialsC,nTrialsD,subjid)
 if nargin < 7 || isempty(displayflag); displayflag = 0; end
 if nargin < 8 || isempty(nTrialsC); nTrialsC  = 2400; end
 if nargin < 9 || isempty(nTrialsD); nTrialsD  = 960; end
+if nargin < 10 || isempty(subjid); subjid  = 1; end
 
 p_common  = theta(5);
 k         = theta(6);
@@ -95,6 +96,11 @@ switch form
         for ii = 1:4
             v_y(yVec == yD(ii)) = exp(theta(ii));
         end
+    case 'cross'
+        load('data_and_analysis.mat', 'theta_est_D');
+        for ii = 1:4
+            v_y(yVec == yD(ii)) = exp(theta_est_D(ii,subjid));
+        end
 end
 dx = sqrt(2*v_y).*randn(nTrials,1) + dyVec;
 xl = sqrt(v_y).*randn(nTrials,1) + yleft;
@@ -119,7 +125,7 @@ switch model
         
     case 'baye'
         
-    case 'C' %catagorization task%
+        %case 'C' %catagorization task%
         criterion = 2*sqrt(v_y./v_dy).*sqrt((v_y+v_dy).*(log(p_common/(1-p_common))+log((v_dy./v_y)+1)/2));
         C_hat = abs(dx)<criterion;
         
@@ -137,6 +143,9 @@ switch model
         C_hat = abs(dx)<dbound;
     case 'linear2'
         C_hat = abs(dx)<(k_1.*v_y+k_0);
+    
+    case 'linear3'
+        C_hat = abs(dx)<(k_1.*sqrt(v_y)+k_0);
         
     case 'baye2'
         RHS = 0.5.*log(v_y.^2+2.*v_y.*v_dy)-log(v_y+v_dy)-log(p_common/(1-p_common));
