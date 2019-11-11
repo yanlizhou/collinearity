@@ -1,7 +1,8 @@
-function loglike = loglikelihood(theta,data,dataD,v_dy,model,task,form,summingflag,subjid,npoints)
-if nargin < 8 || isempty(summingflag); summingflag  = 1; end
-if nargin < 9 || isempty(subjid); subjid = -1; end
-if nargin < 10 || isempty(npoints); npoints = 300; end
+function loglike = loglikelihood(theta,data,dataD,v_dy,model,task,form,dn_flag,summingflag,subjid,npoints)
+if nargin < 8  || isempty(dn_flag); dn_flag  = 0; end
+if nargin < 9  || isempty(summingflag); summingflag  = 1; end
+if nargin < 10 || isempty(subjid); subjid = -1; end
+if nargin < 11 || isempty(npoints); npoints = 300; end
 %%
 % data = newsubjdataC{6};
 % theta = temp_theta;
@@ -60,6 +61,13 @@ dy2  = alldata{2}(:,4);
 sigma2 = NaN(4,1);
 
 if strcmpi(task,'C') || strcmpi(task,'J')
+    
+    if dn_flag
+        dn = exp(theta(end));
+    else
+        dn = [];
+    end
+    
     switch form
         case 'parametric'
             
@@ -78,8 +86,10 @@ if strcmpi(task,'C') || strcmpi(task,'J')
             sigma2(3) = exp(theta(3));
             sigma2(4) = exp(theta(4));
         case 'cross'
-            load('data_and_analysis.mat', 'theta_est_D');
-            sigma2 = exp(theta_est_D(1:4,subjid));
+%             load('data_and_analysis.mat', 'theta_est_D');
+%             sigma2 = exp(theta_est_D(1:4,subjid));
+            load('post_mean.mat','post_mean');
+            sigma2 = exp(post_mean(1:4,subjid));
     end
     
     v1 = NaN(size(y1));
@@ -237,6 +247,12 @@ if strcmpi(task,'C') || strcmpi(task,'J')
                     p_common=theta(1);
                     lapserate = theta(2);
             end
+            if dn_flag
+%                 p_common = 0.5;
+                p_common = theta(5);
+                lapserate = theta(6);
+            end
+            
             
             % Simplified Bayesian model with linear subjective noise (free pcommon)
         case 'linbaye_pc'
@@ -425,12 +441,43 @@ if strcmpi(task,'C') || strcmpi(task,'J')
             a1 = (subsdmax-subsdmin)/(max(sqrt(sigma2))-min(sqrt(sigma2)));
             a0 = subsdmin-a1*min(sqrt(sigma2));
             subjnoise = (a1.*sqrt(sigma2)+a0).^2;
+            
+        case 'sub_vy'
+            switch form
+                case 'parametric'
+                    p_common=theta(4);
+                    sub_sigma_y = exp(theta(5));
+                    lapserate = theta(6);
+                case 'nonparametric'
+                    p_common=theta(5);
+                    sub_sigma_y = exp(theta(6));
+                    lapserate = theta(7);
+                case 'cross'
+                    p_common=theta(1);
+                    sub_sigma_y = exp(theta(2));
+                    lapserate = theta(3);
+            end
+            sub_vy = sub_sigma_y^2;
+            
+        case 'sub_vy_no_pc'
+            switch form
+                case 'parametric'
+                    sub_sigma_y=theta(4);
+                    lapserate = theta(5);
+                case 'nonparametric'
+                    sub_sigma_y=theta(5);
+                    lapserate = theta(6);
+                case 'cross'
+                    sub_sigma_y=theta(1);
+                    lapserate = theta(2);
+            end
+            sub_vy = sub_sigma_y^2;
     end
     
     
     if strcmpi(model,'baye2')
-        temp1 = decision_integral_eval(yL1,yR1,y1,sigma2,v_dy,p_common,yvals,npoints);
-        temp2 = 1 - decision_integral_eval(yL2,yR2,y2,sigma2,v_dy,p_common,yvals,npoints);
+        temp1 = decision_integral_eval(yL1,yR1,y1,sigma2,v_dy,p_common,yvals,npoints,[],dn_flag,dn);
+        temp2 = 1 - decision_integral_eval(yL2,yR2,y2,sigma2,v_dy,p_common,yvals,npoints,[],dn_flag,dn);
     elseif strcmpi(model,'rbm_baye')
         temp1 = decision_integral_eval(yL1,yR1,y1,sigma2,v_dy,0.5,yvals,npoints);
         temp2 = 1 - decision_integral_eval(yL2,yR2,y2,sigma2,v_dy,0.5,yvals,npoints);
@@ -446,9 +493,18 @@ if strcmpi(task,'C') || strcmpi(task,'J')
     elseif strcmpi(model,'linbaye_f2')
         temp1 = decision_integral_eval(yL1,yR1,y1,sigma2,v_dy,0.5,yvals,npoints,subjnoise);
         temp2 = 1 - min(decision_integral_eval(yL2,yR2,y2,sigma2,v_dy,0.5,yvals,npoints,subjnoise),1);
+    elseif strcmpi(model,'sub_vy')
+        temp1 = decision_integral_eval(yL1,yR1,y1,sigma2,sub_vy,p_common,yvals,npoints,[],dn_flag,dn);
+        temp2 = 1 - decision_integral_eval(yL2,yR2,y2,sigma2,sub_vy,p_common,yvals,npoints,[],dn_flag,dn);
+    elseif strcmpi(model,'sub_vy_no_pc')
+        temp1 = decision_integral_eval(yL1,yR1,y1,sigma2,sub_vy,0.5,yvals,npoints,[],dn_flag,dn);
+        temp2 = 1 - decision_integral_eval(yL2,yR2,y2,sigma2,sub_vy,0.5,yvals,npoints,[],dn_flag,dn);
     else
         criterion1 = max(criterion1,0);
         criterion2 = max(criterion2,0);
+        if dn_flag
+            
+        end
         temp1= 0.5.*(erf((criterion1-dy1)./(2.*sqrt(v1)))-erf((-criterion1-dy1)./(2*sqrt(v1))));
         temp2= 1-(0.5.*(erf((criterion2-dy2)./(2.*sqrt(v2)))-erf((-criterion2-dy2)./(2*sqrt(v2)))));
     end

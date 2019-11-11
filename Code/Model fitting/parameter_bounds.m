@@ -1,6 +1,6 @@
-function [lb,ub] = parameter_bounds(model,form,rbmflag)
+function [lb,ub] = parameter_bounds(model,form,rbmflag,dn_flag)
 if nargin < 3 || isempty(rbmflag); rbmflag = 0; end
-
+if nargin < 4 || isempty(dn_flag); dn_flag = 0; end
 
 if rbmflag
     switch model
@@ -109,6 +109,8 @@ else
                     lb = [log(1/6),log(1/6),log(1/6),log(1/6),-1,-20,1e-4];
                     ub = [log(500),log(1000),log(1500),log(3000),5,50,0.3];
                 case 'baye2'
+%                     lb = [log(1/6),log(1/6),log(1/6),log(1/6),0.01,1e-4];
+%                     ub = [log(500),log(1000),log(1500),log(3000),0.99,0.5];
                     lb = [log(1/6),log(1/6),log(1/6),log(1/6),0.01,1e-4];
                     ub = [log(500),log(1000),log(1500),log(3000),0.99,0.5];
                 case 'linbaye_pc'
@@ -138,6 +140,12 @@ else
                 case 'linbaye_f2'
                     lb = [log(1/6),log(1/6),log(1/6),log(1/6),log(1/6),log(1/6),1e-4];
                     ub = [log(500),log(1000),log(1500),log(3000),log(500),log(3000),0.5];
+                case 'sub_vy'
+                    lb = [0.4855, 3.2774, 4.0490, 4.8847, 0.01, 2.5,1e-4];
+                    ub = [4.3865, 5.2943, 6.5815, 8.0697, 0.99, 4.8, 0.3];
+                case 'sub_vy_no_pc'
+                    lb = [log(1/6),log(1/6),log(1/6),log(1/6),0.01,1e-4];
+                    ub = [log(500),log(1000),log(1500),log(3000),200,0.5];
             end
         case 'cross'
             switch model
@@ -182,4 +190,11 @@ else
                     ub = [5,50,10,10,10,10,0.3];
             end
     end
+    
+    if dn_flag
+        lb(length(lb)+1) = 1e-6;
+        ub(length(ub)+1) = 10;
+    end
+    
+ 
 end
