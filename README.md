@@ -30,4 +30,4 @@ To run the code, ensure to have installed these external MATLAB toolboxes:
 
 ### License
 
-The main example file and all MATLAB files in the `code` folder are released under the terms of the [MIT license](https://github.com/yanlizhou/collinearity/blob/master/LICENSE).
+All MATLAB files in the `code` folder are released under the terms of the [MIT license](https://github.com/yanlizhou/collinearity/blob/master/LICENSE).
