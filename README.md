@@ -1,4 +1,5 @@
-# The Role of Sensory Uncertainty in Simple Perceptual Organization
+# The Role of Sensory Uncertainty in Simple Contour Integration
+
 This repository accompanies the manuscript by Zhou, Acerbi and Ma (2018). It includes human subjects' data and the MATLAB code used for fitting and comparing the models reported in the paper.
 
 #### Data files
@@ -13,3 +14,7 @@ Each subject's data cell contains the following columns:
 6. Left line height (pixel)	
 7. Right line height (pixel)	
 8. Reaction time (s)
+
+### License
+
+The main example file and all MATLAB files in the `code` folder are released under the terms of the [MIT license](https://github.com/yanlizhou/collinearity/blob/master/LICENSE).
