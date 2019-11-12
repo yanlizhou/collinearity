@@ -1,4 +1,4 @@
-function [lb,ub] = parameter_bounds(model,form,rbmflag,dn_flag)
+function [lb,ub] = parameter_bounds(model,noise,rbmflag,dn_flag)
 if nargin < 3 || isempty(rbmflag); rbmflag = 0; end
 if nargin < 4 || isempty(dn_flag); dn_flag = 0; end
 
@@ -45,7 +45,7 @@ if rbmflag
             ub      = [log(40),log(20),log(10),log(5),5,6.25,0.3];
     end
 else
-    switch form
+    switch noise
         case 'parametric'
             switch model
                 case 'simplebaye'

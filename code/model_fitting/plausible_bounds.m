@@ -1,4 +1,4 @@
-function [plb,pub] = possible_bounds(model,form,rbmflag,dn_flag)
+function [plb,pub] = plausible_bounds(model,noise,rbmflag,dn_flag)
 if nargin < 3 || isempty(rbmflag); rbmflag = 0; end
 if nargin < 4 || isempty(dn_flag); dn_flag = 0; end
 
@@ -48,7 +48,7 @@ if rbmflag
             pub      = [log(8),log(3.5),log(2),log(1),0.1,2,0.1];
     end
 else
-    switch form
+    switch noise
         case 'parametric'
             switch model
                 case 'simplebaye'
@@ -56,7 +56,7 @@ else
                     pub      = [log(25),log(100),log(400),0.1];
                 case 'threshold'
                     plb      = [log(1),log(20),log(100),1,0.01];
-                    pub      = [log(25),log(100),log(400),400,0.1];
+                    pub      = [log(25),log(100),log(400),50,0.1];
                 case 'linear'
                     plb      = [log(1),log(20),log(100),0.01,1,0.01];
                     pub      = [log(25),log(100),log(400),0.1,10,0.1];
