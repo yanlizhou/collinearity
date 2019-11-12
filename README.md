@@ -5,7 +5,6 @@ This repository accompanies the manuscript by Zhou, Acerbi and Ma (2018). It inc
 #### Data files
 
 All subjects' raw data can be found in the `./data` folder, stored either in the `newsubjdata.mat` file or in individual `.csv` files for each subject and task. `newsubjdataC` denote data for the collinearity task and `newsubjdataD` for the discrimination task. 
-
 For each subject and task, the data table contains the following columns:
 1. Eccentricity level (pixel)	
 2. Offset (pixel)	
