@@ -15,6 +15,14 @@ For each subject and task, the data table contains the following columns:
 7. Right line height (pixel)	
 8. Reaction time (s)
 
+#### Model fitting
+
+Code used to perform the model comparison reported in the paper is available in the `./code` folder. Commented code to run a model fit for a single subject and task is available in the example file `model_fitting_example.m`. This example script will run both maximum-likelihood estimation (MLE) and posterior sampling via Markov Chain Monte Carlo (MCMC), as described in the paper.
+
+To run the code, ensure to have installed these external MATLAB toolboxes:
+- Bayesian Adaptive Direct Search (BADS) for optimization, available [here](https://github.com/lacerbi/bads);
+- Ensemble (inversion) slice sampling *lite* for MCMC sampling, available [here](https://github.com/lacerbi/eissample).
+
 
 ## Reference
 
