@@ -32,7 +32,8 @@ if nargin < 5 || isempty(fullfit); fullfit = false; end
 
 % Add all necessary subfolders to MATLAB path
 folders = {'code','data','utils'};
-for f = 1:numel(folders); addpath(genpath(folders{f})); end
+mypath = fileparts(mfilename('full'));
+for f = 1:numel(folders); addpath(genpath([mypath '..' filesep() folders{f}])); end
 
 % Loading subject dataset
 load('newsubjdata.mat', 'newsubjdataC');
