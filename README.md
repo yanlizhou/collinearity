@@ -26,7 +26,7 @@ To run the code, ensure to have installed these external MATLAB toolboxes:
 
 ## Reference
 
-1. Zhou, Y.\*, Acerbi, L.\* & Ma, W. J. (2018) The Role of Sensory Uncertainty in Simple Perceptual Organization, *biorXiv preprint*. (\*equal contribution authors; [link](https://www.biorxiv.org/content/10.1101/350082v2))
+1. Zhou, Y.\*, Acerbi, L.\* & Ma, W. J. (2018) The Role of Sensory Uncertainty in Simple Contour Integration, *biorXiv preprint*. (\*equal contribution authors; [link](https://www.biorxiv.org/content/10.1101/350082v2))
 
 ### License
 
