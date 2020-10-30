@@ -1,6 +1,7 @@
 # The Role of Sensory Uncertainty in Simple Contour Integration
 
-This repository accompanies the manuscript by Zhou, Acerbi and Ma (2019). It includes human subjects' data and the MATLAB code used for fitting and comparing the models reported in the paper.
+This repository accompanies the manuscript by Zhou, Acerbi and Ma (2020). 
+It includes human subjects' data and the MATLAB code used for fitting and comparing the models reported in the paper.
 
 #### Data files
 
@@ -26,7 +27,7 @@ To run the code, ensure to have installed these external MATLAB toolboxes:
 
 ## Reference
 
-1. Zhou, Y.\*, Acerbi, L.\* & Ma, W. J. (2019) The Role of Sensory Uncertainty in Simple Contour Integration, *biorXiv preprint*. (\*equal contribution authors; [link](https://www.biorxiv.org/content/10.1101/350082v2))
+1. Zhou, Y.\*, Acerbi, L.\* & Ma, W. J. (2020) The Role of Sensory Uncertainty in Simple Contour Integration, *To appear in PLoS Computational Biology*. (\*equal contribution authors; [link](https://www.biorxiv.org/content/10.1101/350082v2))
 
 ### License
 
